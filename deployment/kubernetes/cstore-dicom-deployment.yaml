@@ -46,18 +46,7 @@ items:
         port: 11112
         targetPort: 11112
         protocol: TCP
-# - apiVersion: networking.k8s.io/v1 
-#   kind: Ingress 
-#   metadata:
-#     name: cstoredicom-ingress
-#     namespace: cstoredicom
-#     annotations: 
-#       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-#       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-#   spec:
-#     ingressClassName: nginx
-#     ports:
-#     - name: proxied-tcp-9000
-#       port: 80
-#       targetPort: 11112
-#       protocol: TCP    
+
+# Run following command to to add to tcp-ingress
+# kubectl patch configmap tcp-services -n ingress-nginx --patch '{"data":{"4040":"default/cstoredicom-service:11112"}}'
+# Reference https://minikube.sigs.k8s.io/docs/tutorials/nginx_tcp_udp_ingress/
