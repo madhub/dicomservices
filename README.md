@@ -9,7 +9,19 @@ Service is deployed inside Docker and instances are scaled and load balanced usi
 ## Build requirements
 - Java 17 or higher
 - Functioning Docker setup
-### Build instructions
+### Build instructions - Using multistage docker build
+* Checkout  repository
+   ```shell
+    git clone https://github.com/madhub/dicomservices.git
+    ```
+* Change to **cstoreservice** directory
+   ```shell
+    cd cstoreservice
+* Invoke multistage build
+    ```shell
+    docker build -t dicomdemos/dicomstorescp:1.0 -f Dockerfile-multistage .    ```
+
+### Regular Build instructions
 * Checkout  repository
    ```shell
     git clone https://github.com/madhub/dicomservices.git

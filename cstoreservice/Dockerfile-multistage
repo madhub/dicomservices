@@ -1,0 +1,14 @@
+FROM gradle:8.1-jdk17-jammy as build
+WORKDIR /workspace/app
+
+COPY gradle gradle
+COPY build.gradle settings.gradle gradlew ./
+COPY src src
+
+RUN ./gradlew build jar 
+
+FROM openjdk:17.0.1-jdk-slim
+WORKDIR /app
+ 
+COPY --from=build /workspace/app/build/libs /app
+ENTRYPOINT ["java","-jar","cstoreservice-1.0-SNAPSHOT.jar"]
