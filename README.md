@@ -58,3 +58,6 @@ By default nginx port **4040** published to host. Port **4040** used for all DIC
    ```shell
       storescu  -c store-scp@localhost:4040 
     ```
+  ## Deploying service into Kubernetes
+     [Deploying service into Kubernetes](deployment/kubernetes/readme.md)
+     
