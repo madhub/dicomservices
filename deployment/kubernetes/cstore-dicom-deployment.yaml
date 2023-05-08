@@ -1,6 +1,11 @@
 apiVersion: v1
 kind: List
 items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: cstoredicom
+
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -9,7 +14,7 @@ items:
     labels:
       app: cstoredicom
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       matchLabels:
         app: cstoredicom
@@ -27,10 +32,10 @@ items:
           imagePullPolicy: Never
           resources:
             requests:
-              memory: "1G"
+              memory: "512M"
               cpu: "0.5"
             limits:
-              memory: "2G"
+              memory: "1G"
               cpu: "1"
 
 - apiVersion: v1
@@ -46,7 +51,27 @@ items:
         port: 11112
         targetPort: 11112
         protocol: TCP
+# Created config map to for routing tcp traffic
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: tcp-services
+    namespace: ingress-nginx
+  data:
+    4040: "cstoredicom/cstoredicom-service:11112"        
 
 # Run following command to to add to tcp-ingress
-# kubectl patch configmap tcp-services -n ingress-nginx --patch '{"data":{"4040":"default/cstoredicom-service:11112"}}'
-# Reference https://minikube.sigs.k8s.io/docs/tutorials/nginx_tcp_udp_ingress/
+# Edit ingress-nginx-controller service add below entries 
+#  - name: proxied-tcp-4040
+#       port: 4040
+#       targetPort: 9000
+#       protocol: TCP
+# 'kubectl edit svc ingress-nginx-controller -n ingress-nginx' 
+
+# Edit ingress-nginx-controller deployment add command line parameter to use 'tcp-services' configmap
+#  args:
+#     - --tcp-services-configmap=ingress-nginx/tcp-services
+# 'kubectl edit deploy ingress-nginx-controller -n ingress-nginx'
+
+# More informaton of adding tcp ingress is @ https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
+
